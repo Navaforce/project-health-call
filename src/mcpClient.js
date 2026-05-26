@@ -110,7 +110,7 @@ async function soqlQuery(accessToken, sessionId, query) {
         method: 'tools/call',
         params: {
             name: 'soqlQuery',
-            arguments: { query },
+            arguments: { q: query },
         },
     });
 
@@ -151,6 +151,23 @@ function mcpRequestFull(accessToken, body, sessionId) {
                 let data = '';
                 res.on('data', (chunk) => (data += chunk));
                 res.on('end', () => {
+                    // 202 with empty body = notification acknowledged (no response expected)
+                    // 200 with empty body = SSE stream already closed (result was streamed)
+                    if (!data.trim()) {
+                        resolve({ headers: res.headers, body: null });
+                        return;
+                    }
+                    // SSE format: lines starting with "data: "
+                    if (data.includes('data: ')) {
+                        const lines = data.split('\n').filter(l => l.startsWith('data: '));
+                        const lastLine = lines[lines.length - 1];
+                        try {
+                            const parsed = JSON.parse(lastLine.slice(6));
+                            if (parsed.error) reject(new Error(`MCP error ${parsed.error.code}: ${parsed.error.message}`));
+                            else resolve({ headers: res.headers, body: parsed });
+                            return;
+                        } catch {}
+                    }
                     try {
                         const parsedBody = JSON.parse(data);
                         if (parsedBody.error) {
@@ -159,7 +176,8 @@ function mcpRequestFull(accessToken, body, sessionId) {
                             resolve({ headers: res.headers, body: parsedBody });
                         }
                     } catch (e) {
-                        reject(new Error(`Non-JSON MCP response: ${data.slice(0, 200)}`));
+                        console.error(`[MCP] HTTP ${res.statusCode} non-JSON response:`, data.slice(0, 500));
+                        reject(new Error(`Non-JSON MCP response (HTTP ${res.statusCode}): ${data.slice(0, 200)}`));
                     }
                 });
             }
