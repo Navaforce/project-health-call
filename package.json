@@ -1,0 +1,27 @@
+{
+  "name": "project-health-call",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Navaforce/project-health-call.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Navaforce/project-health-call/issues"
+  },
+  "homepage": "https://github.com/Navaforce/project-health-call#readme",
+  "dependencies": {
+    "@slack/bolt": "^4.7.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
