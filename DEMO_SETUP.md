@@ -32,23 +32,22 @@ https://<something>.trycloudflare.com
 
 ---
 
-## Step 2 — Update .env
+## Step 2 — Update .env with new tunnel URL
 
-Open `/Users/dnava/project-health-call/.env` and update:
-
-```
-APP_BASE_URL=https://<your-new-tunnel-url>.trycloudflare.com
-```
-
-Save the file.
-
-Confirm these values are still correct (they don't change between sessions):
-
-```
-SF_CLIENT_ID=3MVG9o0Rj_GRmEujTLx5b.PNfBoR1n3S7IgdZZ8lOTkpodXfieRwG738zyhTb3V2kkFn_R2cpm_E9QCGTAWw3
-SF_ORG_URL=https://navy-program-management--fullcopy.sandbox.my.salesforce.com
-SF_MCP_URL=https://api.salesforce.com/platform/mcp/v1/d/navy-program-management--fullcopy/sandbox/platform/sobject-all
-```
+1. Open a **new terminal tab** (leave the tunnel running in its tab)
+2. Run:
+   ```bash
+   open ~/project-health-call/.env
+   ```
+3. The file opens in TextEdit. Find this line:
+   ```
+   APP_BASE_URL=https://others-democracy-hop-comfort.trycloudflare.com
+   ```
+4. Replace the URL after `=` with your new cloudflared URL from Step 1. Example:
+   ```
+   APP_BASE_URL=https://<your-new-tunnel-url>.trycloudflare.com
+   ```
+5. **Save** (⌘S) and close TextEdit
 
 ---
 
